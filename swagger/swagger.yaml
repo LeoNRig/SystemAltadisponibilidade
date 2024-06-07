@@ -1,60 +1,120 @@
-openapi: 3.0.0
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: Sistema de Alta Disponibilidade
+  description: API para um sistema de alta disponibilidade utilizando Docker Compose, Nginx, Swagger e MongoDB
+host: localhost:5000
+basePath: /
+schemes:
+  - http
 paths:
   /item:
-    post:
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                description:
-                  type: string
+    get:
+      summary: Listar todos os itens
+      description: Retorna uma lista de itens
+      produces:
+        - application/json
       responses:
-        '201':
-        
+        200:
+          description: Lista de itens
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Item'
+    post:
+      summary: Criar um novo item
+      description: Cria um novo item
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: item
+          description: Item a ser criado
+          schema:
+            $ref: '#/definitions/NewItem'
+      responses:
+        201:
+          description: Item criado
+          schema:
+            $ref: '#/definitions/Item'
   /item/{id}:
     get:
+      summary: Obter um item pelo ID
+      description: Retorna um único item
+      produces:
+        - application/json
       parameters:
-        - in: path
-          name: id
+        - name: id
+          in: path
           required: true
-          schema:
-            type: string
+          type: string
       responses:
-        '200':
-
+        200:
+          description: Item encontrado
+          schema:
+            $ref: '#/definitions/Item'
+        404:
+          description: Item não encontrado
     put:
+      summary: Atualizar um item pelo ID
+      description: Atualiza um item existente
+      consumes:
+        - application/json
+      produces:
+        - application/json
       parameters:
-        - in: path
-          name: id
+        - name: id
+          in: path
           required: true
+          type: string
+        - in: body
+          name: item
+          description: Item a ser atualizado
           schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                description:
-                  type: string
+            $ref: '#/definitions/NewItem'
       responses:
-        '200':
-
+        200:
+          description: Item atualizado
+          schema:
+            $ref: '#/definitions/Item'
+        404:
+          description: Item não encontrado
     delete:
+      summary: Deletar um item pelo ID
+      description: Deleta um item existente
+      produces:
+        - application/json
       parameters:
-        - in: path
-          name: id
+        - name: id
+          in: path
           required: true
-          schema:
-            type: string
+          type: string
       responses:
-        '204':
-          description: No Content
+        204:
+          description: Item deletado
+        404:
+          description: Item não encontrado
+definitions:
+  Item:
+    type: object
+    required:
+      - id
+      - name
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      description:
+        type: string
+  NewItem:
+    type: object
+    required:
+      - name
+    properties:
+      name:
+        type: string
+      description:
+        type: string

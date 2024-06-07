@@ -1,16 +1,16 @@
 const express = require('express');
+const router = express.Router();
 const mongoose = require('mongoose');
 
-const router = express.Router();
-
-const itemSchema = new mongoose.Schema({
+const ItemSchema = new mongoose.Schema({
   name: String,
   description: String
 });
 
-const Item = mongoose.model('Item', itemSchema);
+const Item = mongoose.model('Item', ItemSchema);
 
-router.get('/', async (req, res) => {
+// Listar todos os itens
+router.get('/', async (res) => {
   try {
     const items = await Item.find();
     res.json(items.map(item => ({ id: item._id, name: item.name, description: item.description })));
@@ -19,6 +19,7 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Criar um novo item
 router.post('/', async (req, res) => {
   const newItem = new Item({
     name: req.body.name,
@@ -27,27 +28,38 @@ router.post('/', async (req, res) => {
 
   try {
     const savedItem = await newItem.save();
-    res.status(201).json({ id: savedItem._id  , name: savedItem.name, description: savedItem.description });
+    res.status(201).json({ id: savedItem._id, name: savedItem.name, description: savedItem.description });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 });
 
+
+// Atualizar um item pelo ID
 router.put('/:id', async (req, res) => {
   try {
     const item = await Item.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    res.json(item);
+    if (item) {
+      res.json({ id: item._id, name: item.name, description: item.description });
+    } else {
+      res.status(404).json({ error: 'Item não encontrado' });
+    }
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(400).json({ error: err.message });
   }
 });
 
+// Deletar um item pelo ID
 router.delete('/:id', async (req, res) => {
   try {
-    await Item.findByIdAndDelete(req.params.id);
-    res.json({ message: 'Item deleted' });
+    const item = await Item.findByIdAndDelete(req.params.id);
+    if (item) {
+      res.status(204).send();
+    } else {
+      res.status(404).json({ error: 'Item não encontrado' });
+    }
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ error: err.message });
   }
 });
 
