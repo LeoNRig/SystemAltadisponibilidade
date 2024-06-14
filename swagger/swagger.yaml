@@ -1,120 +1,92 @@
 swagger: "2.0"
 info:
+  description: "API de Itens"
   version: "1.0.0"
-  title: Sistema de Alta Disponibilidade
-  description: API para um sistema de alta disponibilidade utilizando Docker Compose, Nginx, Swagger e MongoDB
-host: localhost:5000
-basePath: /
+  title: "API de Itens"
+host: "localhost:5000"
+basePath: "/"
+tags:
+  - name: "item"
+    description: "Operações sobre itens"
 schemes:
-  - http
+  - "http"
 paths:
   /item:
     get:
-      summary: Listar todos os itens
-      description: Retorna uma lista de itens
-      produces:
-        - application/json
+      tags:
+        - "item"
+      summary: "Obter todos os itens"
       responses:
         200:
-          description: Lista de itens
+          description: "Lista de itens"
           schema:
-            type: array
+            type: "array"
             items:
-              $ref: '#/definitions/Item'
+              $ref: "#/definitions/Item"
     post:
-      summary: Criar um novo item
-      description: Cria um novo item
-      consumes:
-        - application/json
-      produces:
-        - application/json
+      tags:
+        - "item"
+      summary: "Criar um novo item"
       parameters:
-        - in: body
-          name: item
-          description: Item a ser criado
+        - in: "body"
+          name: "body"
+          description: "Item a ser criado"
+          required: true
           schema:
-            $ref: '#/definitions/NewItem'
+            $ref: "#/definitions/Item"
       responses:
         201:
-          description: Item criado
+          description: "Item criado"
           schema:
-            $ref: '#/definitions/Item'
-  /item/{id}:
-    get:
-      summary: Obter um item pelo ID
-      description: Retorna um único item
-      produces:
-        - application/json
-      parameters:
-        - name: id
-          in: path
-          required: true
-          type: string
-      responses:
-        200:
-          description: Item encontrado
-          schema:
-            $ref: '#/definitions/Item'
-        404:
-          description: Item não encontrado
+            $ref: "#/definitions/Item"
+  /item/{itemId}:
     put:
-      summary: Atualizar um item pelo ID
-      description: Atualiza um item existente
-      consumes:
-        - application/json
-      produces:
-        - application/json
+      tags:
+        - "item"
+      summary: "Atualizar um item existente"
       parameters:
-        - name: id
-          in: path
+        - name: "itemId"
+          in: "path"
           required: true
-          type: string
-        - in: body
-          name: item
-          description: Item a ser atualizado
+          type: "integer"
+        - in: "body"
+          name: "body"
+          description: "Dados do item a serem atualizados"
+          required: true
           schema:
-            $ref: '#/definitions/NewItem'
+            $ref: "#/definitions/Item"
       responses:
         200:
-          description: Item atualizado
+          description: "Item atualizado"
           schema:
-            $ref: '#/definitions/Item'
+            $ref: "#/definitions/Item"
         404:
-          description: Item não encontrado
+          description: "Item não encontrado"
     delete:
-      summary: Deletar um item pelo ID
-      description: Deleta um item existente
-      produces:
-        - application/json
+      tags:
+        - "item"
+      summary: "Deletar um item existente"
       parameters:
-        - name: id
-          in: path
+        - name: "itemId"
+          in: "path"
           required: true
-          type: string
+          type: "integer"
       responses:
         204:
-          description: Item deletado
+          description: "Item deletado"
         404:
-          description: Item não encontrado
+          description: "Item não encontrado"
 definitions:
   Item:
-    type: object
+    type: "object"
     required:
-      - id
-      - name
+      - "id"
+      - "name"
+      - "description"
     properties:
       id:
-        type: string
+        type: "integer"
       name:
-        type: string
+        type: "string"
       description:
-        type: string
-  NewItem:
-    type: object
-    required:
-      - name
-    properties:
-      name:
-        type: string
-      description:
-        type: string
+        type: "string"

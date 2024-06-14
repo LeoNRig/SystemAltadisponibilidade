@@ -3,8 +3,14 @@ const router = express.Router();
 const mongoose = require('mongoose');
 
 const ItemSchema = new mongoose.Schema({
-  name: String,
-  description: String
+  name: {
+    type: String,
+    required: true
+  },
+  description: {
+    type: String,
+    required: true
+  }
 });
 
 const Item = mongoose.model('Item', ItemSchema);
