@@ -1,4 +1,4 @@
-swagger: "2.0"
+openapi: 3.0.3
 info:
   description: "API de Itens"
   version: "1.0.0"
@@ -8,7 +8,7 @@ basePath: "/"
 tags:
   - name: "item"
     description: "Operações sobre itens"
-schemes:
+schemes: 
   - "http"
 paths:
   /item:
@@ -19,26 +19,29 @@ paths:
       responses:
         200:
           description: "Lista de itens"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Item"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Item"
     post:
       tags:
         - "item"
       summary: "Criar um novo item"
-      parameters:
-        - in: "body"
-          name: "body"
-          description: "Item a ser criado"
-          required: true
-          schema:
-            $ref: "#/definitions/Item"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Item"
       responses:
         201:
           description: "Item criado"
-          schema:
-            $ref: "#/definitions/Item"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Item"
   /item/{itemId}:
     put:
       tags:
@@ -48,18 +51,21 @@ paths:
         - name: "itemId"
           in: "path"
           required: true
-          type: "integer"
-        - in: "body"
-          name: "body"
-          description: "Dados do item a serem atualizados"
-          required: true
           schema:
-            $ref: "#/definitions/Item"
+            type: "integer"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Item"
       responses:
         200:
           description: "Item atualizado"
-          schema:
-            $ref: "#/definitions/Item"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Item"
         404:
           description: "Item não encontrado"
     delete:
@@ -70,23 +76,25 @@ paths:
         - name: "itemId"
           in: "path"
           required: true
-          type: "integer"
+          schema:
+            type: "integer"
       responses:
         204:
           description: "Item deletado"
         404:
           description: "Item não encontrado"
-definitions:
-  Item:
-    type: "object"
-    required:
-      - "id"
-      - "name"
-      - "description"
-    properties:
-      id:
-        type: "integer"
-      name:
-        type: "string"
-      description:
-        type: "string"
+components:
+  schemas:
+    Item:
+      type: "object"
+      required:
+        - "id"
+        - "name"
+        - "description"
+      properties:
+        id:
+          type: "integer"
+        name:
+          type: "string"
+        description:
+          type: "string"
