@@ -40,7 +40,6 @@ app.get('/item', async (req, res) => {
   }
 });
 
-// Criar um novo item
 app.post('/item', async (req, res) => {
   try {
     const { id, name, description } = req.body;
@@ -56,7 +55,6 @@ app.post('/item', async (req, res) => {
   }
 });
 
-// Atualizar um item existente
 app.put('/item/:id', async (req, res) => {
   try {
     const { name, description } = req.body;
@@ -74,7 +72,6 @@ app.put('/item/:id', async (req, res) => {
   }
 });
 
-// Deletar um item
 app.delete('/item/:id', async (req, res) => {
   try {
     const deletedItem = await Item.findOneAndDelete({ id: req.params.id });
@@ -88,7 +85,6 @@ app.delete('/item/:id', async (req, res) => {
   }
 });
 
-// Iniciar o servidor
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
